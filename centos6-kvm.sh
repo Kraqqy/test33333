@@ -23,7 +23,7 @@ sed -i '$ i\echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6' /etc/rc.d/rc.loca
 yum -y install wget curl
 
 # setting repo
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/epel-release-6-8.noarch.rpm
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/epel-release-6-8.noarch.rpm
 wget http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 rpm -Uvh epel-release-6-8.noarch.rpm
 rpm -Uvh remi-release-6.rpm
@@ -83,27 +83,27 @@ echo "screenfetch" >> .bash_profile
 
 # install webserver
 cd
-wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/nginx.conf"
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/nginx.conf"
 sed -i 's/www-data/nginx/g' /etc/nginx/nginx.conf
 mkdir -p /home/vps/public_html
 echo "<pre>Setup by Ibnu Fachrizal<pre>" > /home/vps/public_html/index.html
 echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
 rm /etc/nginx/conf.d/*
-wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/vps.conf"
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/vps.conf"
 sed -i 's/apache/nginx/g' /etc/php-fpm.d/www.conf
 chmod -R +rx /home/vps
 service php-fpm restart
 service nginx restart
 
 # install openvpn
-wget -O /etc/openvpn/openvpn.tar "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/openvpn-debian.tar"
+wget -O /etc/openvpn/openvpn.tar "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/openvpn-debian.tar"
 cd /etc/openvpn/
 tar xf openvpn.tar
-wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/1194-centos.conf"
+wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/1194-centos.conf"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/1194-centos64.conf"
+  wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/1194-centos64.conf"
 fi
-wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/iptables.up.rules"
+wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/iptables.up.rules"
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.d/rc.local
 MYIP=`curl -s ifconfig.me`;
@@ -129,9 +129,9 @@ cp client.tar /home/vps/public_html/
 cd
 
 # install badvpn
-wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/badvpn-udpgw"
+wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/badvpn-udpgw"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/badvpn-udpgw64"
+  wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/badvpn-udpgw64"
 fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.d/rc.local
@@ -140,15 +140,15 @@ screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 # install mrtg
 cd /etc/snmp/
-wget -O /etc/snmp/snmpd.conf "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/snmpd.conf"
-wget -O /root/mrtg-mem.sh "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/mrtg-mem.sh"
+wget -O /etc/snmp/snmpd.conf "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/snmpd.conf"
+wget -O /root/mrtg-mem.sh "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/mrtg-mem.sh"
 chmod +x /root/mrtg-mem.sh
 service snmpd restart
 chkconfig snmpd on
 snmpwalk -v 1 -c public localhost | tail
 mkdir -p /home/vps/public_html/mrtg
 cfgmaker --zero-speed 100000000 --global 'WorkDir: /home/vps/public_html/mrtg' --output /etc/mrtg/mrtg.cfg public@localhost
-curl "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/mrtg.conf" >> /etc/mrtg/mrtg.cfg
+curl "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/mrtg.conf" >> /etc/mrtg/mrtg.cfg
 sed -i 's/WorkDir: \/var\/www\/mrtg/# WorkDir: \/var\/www\/mrtg/g' /etc/mrtg/mrtg.cfg
 sed -i 's/# Options\[_\]: growright, bits/Options\[_\]: growright/g' /etc/mrtg/mrtg.cfg
 indexmaker --output=/home/vps/public_html/mrtg/index.html /etc/mrtg/mrtg.cfg
@@ -191,7 +191,7 @@ chkconfig fail2ban on
 
 # install squid
 yum -y install squid
-wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/squid-centos.conf"
+wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/squid-centos.conf"
 sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 chkconfig squid on
@@ -206,21 +206,21 @@ chkconfig webmin on
 
 # pasang bmon
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/bmon "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/bmon64"
+  wget -O /usr/bin/bmon "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/bmon64"
 else
-  wget -O /usr/bin/bmon "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/bmon"
+  wget -O /usr/bin/bmon "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/bmon"
 fi
 chmod +x /usr/bin/bmon
 
 # User Status
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/user-list
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/user-list
 mv ./user-list /usr/local/bin/user-list
 chmod +x /usr/local/bin/user-list
 
 # Install Dos Deflate
 apt-get -y install dnsutils dsniff
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/ddos-deflate-master.zip
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/ddos-deflate-master.zip
 unzip ddos-deflate-master.zip
 cd ddos-deflate-master
 ./install.sh
@@ -228,186 +228,186 @@ cd
 
 # instal UPDATE SCRIPT
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/update
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/update
 mv ./update /usr/bin/update
 chmod +x /usr/bin/update
 
 # instal Buat Akun SSH/OpenVPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/buatakun
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/buatakun
 mv ./buatakun /usr/bin/buatakun
 chmod +x /usr/bin/buatakun
 
 # instal Generate Akun SSH/OpenVPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/generate
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/generate
 mv ./generate /usr/bin/generate
 chmod +x /usr/bin/generate
 
 # instal Generate Akun Trial
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/trial
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/trial
 mv ./trial /usr/bin/trial
 chmod +x /usr/bin/trial
 
 # instal  Ganti Password Akun SSH/VPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userpass
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userpass
 mv ./userpass /usr/bin/userpass
 chmod +x /usr/bin/userpass
 
 # instal Generate Akun SSH/OpenVPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userrenew
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userrenew
 mv ./userrenew /usr/bin/userrenew
 chmod +x /usr/bin/userrenew
 
 # instal Hapus Akun SSH/OpenVPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userdelete
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userdelete
 mv ./userdelete /usr/bin/userdelete
 chmod +x /usr/bin/userdelete
 
 # instal Cek Login Dropbear & OpenSSH
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userlogin
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userlogin
 mv ./userlogin /usr/bin/userlogin
 chmod +x /usr/bin/userlogin
 
 # instal Cek Login Dropbear, OpenSSH & OpenVPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userlogin
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userlogin
 mv ./userlogin /usr/bin/userlogin
 chmod +x /usr/bin/userlogin
 
 # instal Auto Limit Multi Login
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/autolimit
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/autolimit
 mv ./autolimit /usr/bin/autolimit
 chmod +x /usr/bin/autolimit
 
 # instal Auto Limit Script Multi Login
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/auto-limit-script
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/auto-limit-script
 mv ./auto-limit-script /usr/bin/auto-limit-script
 chmod +x /usr/bin/auto-limit-script
 
 # instal Melihat detail user SSH & OpenVPN 
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userdetail
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userdetail
 mv ./userdetail /usr/bin/userdetail
 chmod +x /usr/bin/userdetail
 
 # instal Delete Akun Expire
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/deleteuserexpire
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/deleteuserexpire
 mv ./deleteuserexpire /usr/bin/deleteuserexpire
 chmod +x /usr/bin/deleteuserexpire
 
 # instal  Kill Multi Login
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/autokilluser
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/autokilluser
 mv ./autokilluser /usr/bin/autokilluser
 chmod +x /usr/bin/autokilluser
 
 # instal Auto Banned Akun
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userban
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userban
 mv ./userban /usr/bin/userban
 chmod +x /usr/bin/userban
 
 # instal Unbanned Akun
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userunban
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userunban
 mv ./userunban /usr/bin/userunban
 chmod +x /usr/bin/userunban
 
 # instal Mengunci Akun SSH & OpenVPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userlock
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userlock
 mv ./userlock /usr/bin/userlock
 chmod +x /usr/bin/userlock
 
 # instal Membuka user SSH & OpenVPN yang terkunci
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userunlock
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userunlock
 mv ./userunlock /usr/bin/userunlock
 chmod +x /usr/bin/userunlock
 
 # instal Melihat daftar user yang terkick oleh perintah user-limit
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/loglimit
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/loglimit
 mv ./loglimit /usr/bin/loglimit
 chmod +x /usr/bin/loglimit
 
 # instal Melihat daftar user yang terbanned oleh perintah user-ban
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/logban
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/logban
 mv ./logban /usr/bin/logban
 chmod +x /usr/bin/logban
 
 # instal Buat Akun PPTP VPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/useraddpptp
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/useraddpptp
 mv ./useraddpptp /usr/bin/useraddpptp
 chmod +x /usr/bin/useraddpptp
 
 # instal Hapus Akun PPTP VPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userdeletepptp
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userdeletepptp
 mv ./userdeletepptp /usr/bin/userdeletepptp
 chmod +x /usr/bin/userdeletepptp
 
 # instal Lihat Detail Akun PPTP VPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/detailpptp
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/detailpptp
 mv ./detailpptp /usr/bin/detailpptp
 chmod +x /usr/bin/detailpptp
 
 # instal Cek login PPTP VPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userloginpptp
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userloginpptp
 mv ./userloginpptp /usr/bin/userloginpptp
 chmod +x /usr/bin/userloginpptp
 
 # instal Lihat Daftar User PPTP VPN
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/alluserpptp
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/alluserpptp
 mv ./alluserpptp /usr/bin/alluserpptp
 chmod +x /usr/bin/alluserpptp
 
 # instal Set Auto Reboot
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/autoreboot
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/autoreboot
 mv ./autoreboot /usr/bin/autoreboot
 chmod +x /usr/bin/autoreboot
 
 # Install SPEED tES
 apt-get install python
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/speedtest.py
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/speedtest.py
 chmod +x speedtest.py
 
 # instal autolimitscript
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/auto-limit-script
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/auto-limit-script
 mv ./auto-limit-script /usr/bin/auto-limit-script
 chmod +x /usr/bin/auto-limit-script
 
 # instal userdelete
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/userdelete
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/userdelete
 mv ./userdelete /usr/bin/userdelete
 chmod +x /usr/bin/userdelete
 
 # Install Menu
 cd
-wget https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/menu
+wget https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/menu
 mv ./menu /usr/local/bin/menu
 chmod +x /usr/local/bin/menu
 
 # download script
 cd
-wget -O /issue.net.txt "https://raw.githubusercontent.com/ibnufachrizal/sshinjector2/master/config/banner"
+wget -O /issue.net.txt "https://raw.githubusercontent.com/galihkontlo/sshinjector2/master/config/banner"
 echo "0 0 * * * root /root/user-expired.sh" > /etc/cron.d/user-expired
 echo "0 0 * * * root /sbin/reboot" > /etc/cron.d/reboot
 echo "* * * * * service dropbear restart" > /etc/cron.d/dropbear
